@@ -1,0 +1,11 @@
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/Props.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/Util.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/servlet/AddStudentServlet.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/data/Student.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/servlet/StudentDataServlet.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/db/DataBase.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/data/Classes.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/model/StudentModel.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/servlet/DeleteStudentServlet.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/Constants.java
+/home/nevergiveup/projects/InformationWebProject/src/main/java/com/school/servlet/EditStudentServlet.java
