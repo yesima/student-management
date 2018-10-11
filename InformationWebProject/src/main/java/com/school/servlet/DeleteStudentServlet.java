@@ -22,6 +22,7 @@ public class DeleteStudentServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        JSONObject json = new JSONObject();
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
@@ -32,7 +33,8 @@ public class DeleteStudentServlet extends HttpServlet {
 
             boolean invalidStudentId = Util.parameterCheck(studentIdStr);
             if(invalidStudentId){
-                response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                json.put("NOT ACCEPTABLE PARAMETERS", HttpServletResponse.SC_NOT_ACCEPTABLE);
+                response.getWriter().write(json.toString());
                 return;
             }
             model = new StudentModel();
@@ -49,7 +51,8 @@ public class DeleteStudentServlet extends HttpServlet {
             out.println(responseObject.toString());
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            json.put("NOT FOUND", HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write(json.toString());
         } finally {
             model.close();
         }

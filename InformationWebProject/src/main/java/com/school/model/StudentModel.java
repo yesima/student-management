@@ -177,7 +177,7 @@ public class StudentModel {
             stmt.setString(4, studentInformation.getEmail());
 
             stmt.executeUpdate();
-
+            increaseNumberOfStudent(studentInformation.getClassId());
             success = true;
         } catch (SQLException se) {
             LOGGER.severe(se.getMessage());
@@ -204,10 +204,11 @@ public class StudentModel {
      */
     public boolean deleteStudent(int studentId) {
         PreparedStatement stmt = null;
-        Connection conn = null;
+//        Connection conn = null;
         int i = 0;
         try {
-            conn = DataBase.getConnection(true);
+            decreaseNumberOfStudent(studentId);
+//            conn = DataBase.getConnection(true);
             stmt = conn.prepareStatement("DELETE FROM student_details WHERE id = ?;");
             stmt.setInt(1, studentId);
 
@@ -227,6 +228,101 @@ public class StudentModel {
         }
 
         return i > 0;
+    }
+
+
+    /**
+     * Decrease number of students on classes
+     * @params studentId
+     * @return True if operation is successful, false otherwise
+     */
+    private boolean decreaseNumberOfStudent(int studentId) throws ClassNotFoundException, SQLException{
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean success = false;
+        try {
+            stmt = conn.prepareStatement("SELECT c.id, c.number_of_students FROM student_details sd " +
+                    "LEFT JOIN classes c ON c.id = sd.class_id WHERE sd.id = ?;");
+            stmt.setInt(1, studentId);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int classId = rs.getInt("id");
+                int studentCount = rs.getInt("number_of_students");
+                studentCount -= 1;
+                stmt = conn.prepareStatement("UPDATE classes SET number_of_students = ? WHERE id = ?;");
+                stmt.setInt(1, studentCount);
+                stmt.setInt(2, classId);
+                stmt.executeUpdate();
+                success = true;
+            }
+        } catch (SQLException se) {
+            LOGGER.severe(se.getMessage());
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+                LOGGER.severe(se2.getMessage());
+            }
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException se) {
+                LOGGER.severe(se.getMessage());
+            }
+        }
+
+        return success;
+    }
+
+    /**
+     * Increase number of students on classes
+     * @params classId
+     * @return True if operation is successful, false otherwise
+     */
+    private boolean increaseNumberOfStudent(int classId) throws ClassNotFoundException, SQLException{
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean success = false;
+        try {
+            stmt = conn.prepareStatement("SELECT number_of_students FROM classes WHERE id = ?;");
+            stmt.setInt(1, classId);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int studentCount = rs.getInt("number_of_students");
+                studentCount += 1;
+                stmt = conn.prepareStatement("UPDATE classes SET number_of_students = ? WHERE id = ?;");
+                stmt.setInt(1, studentCount);
+                stmt.setInt(2, classId);
+                stmt.executeUpdate();
+                success = true;
+            }
+        } catch (SQLException se) {
+            LOGGER.severe(se.getMessage());
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+                LOGGER.severe(se2.getMessage());
+            }
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException se) {
+                LOGGER.severe(se.getMessage());
+            }
+        }
+
+        return success;
     }
 
     /**

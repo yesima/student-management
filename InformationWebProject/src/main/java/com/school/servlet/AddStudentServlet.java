@@ -23,6 +23,7 @@ public class AddStudentServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        JSONObject json = new JSONObject();
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
@@ -37,7 +38,8 @@ public class AddStudentServlet extends HttpServlet {
 
             boolean parameterCheckValue = Util.parameterCheck(classIdStr, firstName, lastName, email);
             if(parameterCheckValue){
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                json.put("NOT ACCEPTABLE PARAMETERS", HttpServletResponse.SC_NOT_ACCEPTABLE);
+                response.getWriter().write(json.toString());
                 return;
             }
 
@@ -61,7 +63,8 @@ public class AddStudentServlet extends HttpServlet {
             out.println(responseObject.toString());
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            json.put("PARAMETERS NOT FOUND", HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write(json.toString());
         } finally {
             model.close();
         }

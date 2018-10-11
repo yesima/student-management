@@ -22,6 +22,7 @@ public class EditStudentServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JSONObject json = new JSONObject();
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
@@ -37,7 +38,8 @@ public class EditStudentServlet extends HttpServlet {
 
 			boolean invalidStudentId = Util.parameterCheck(studentIdStr);
             if(invalidStudentId){
-                response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                json.put("NOT ACCEPTABLE PARAMETERS", HttpServletResponse.SC_NOT_ACCEPTABLE);
+                response.getWriter().write(json.toString());
                 return;
             }
 			boolean invalidClassId = Util.parameterCheck(classIdStr);
@@ -45,7 +47,8 @@ public class EditStudentServlet extends HttpServlet {
 			boolean invalidLastName = Util.parameterCheck(lastName);
 			boolean invalidEmail = Util.parameterCheck(email);
 			if(invalidClassId && invalidFirstName && invalidLastName && invalidEmail){
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                json.put("BAD REQUEST", HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write(json.toString());
 				return;
 			}
 			model = new StudentModel();
@@ -68,7 +71,8 @@ public class EditStudentServlet extends HttpServlet {
 			out.println(responseObject.toString());
 		} catch (Exception e) {
 			LOGGER.severe(e.getMessage());
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            json.put("NOT FOUND", HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write(json.toString());
 		} finally {
 			model.close();
 		}
