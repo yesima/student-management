@@ -204,11 +204,9 @@ public class StudentModel {
      */
     public boolean deleteStudent(int studentId) {
         PreparedStatement stmt = null;
-//        Connection conn = null;
         int i = 0;
         try {
             decreaseNumberOfStudent(studentId);
-//            conn = DataBase.getConnection(true);
             stmt = conn.prepareStatement("DELETE FROM student_details WHERE id = ?;");
             stmt.setInt(1, studentId);
 
